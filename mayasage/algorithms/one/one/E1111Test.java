@@ -19,24 +19,40 @@ class E1111Test {
 
   @Test
   public void test() {
-    boolean[][] a = {
-      {true, true},
-      {false, false}
-    };
-    testInput(a,
+    testInput(new boolean[][]{
+        {true, true},
+        {false, false}
+      },
       "  1 2" + System.lineSeparator() +
         "1 * *" + System.lineSeparator() +
         "2    " + System.lineSeparator()
     );
 
-    a = new boolean[][]{
-      {true, false},
-      {false, true}
-    };
-    testInput(a,
+    testInput(new boolean[][]{
+        {true, false},
+        {false, true}
+      },
       "  1 2" + System.lineSeparator() +
         "1 *  " + System.lineSeparator() +
         "2   *" + System.lineSeparator()
+    );
+
+    testInput(new boolean[][]{
+        {true, false},
+        {false}
+      },
+      "  1 2" + System.lineSeparator() +
+        "1 *  " + System.lineSeparator() +
+        "2  " + System.lineSeparator()
+    );
+
+    testInput(new boolean[][]{
+        {true, false},
+        {false, true, true, false}
+      },
+      "  1 2 3 4" + System.lineSeparator() +
+        "1 *  " + System.lineSeparator() +
+        "2   * *  " + System.lineSeparator()
     );
   }
 }
