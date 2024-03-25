@@ -24,5 +24,11 @@ class UnionFindOneTest {
     assertEquals(4, uf.find(4));
 
     assertEquals(5, uf.count());
+
+    // This will take a long time.
+//    uf = new UnionFindOne(10000000);
+//    for (int i = 1; i < 10000000; i += 1) {
+//      uf.union(i, i + 1);
+//    }
   }
 }
