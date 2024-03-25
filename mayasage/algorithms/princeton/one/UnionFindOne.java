@@ -35,6 +35,8 @@
  * Then updating just set[1] to 4 is not enough.
  * We need to update every 1 in set to 4, because 1C3 & 4C1 => 3C4. (O(N))
  * This makes the time complexity of this algorithm O(N^2).
+ *
+ * Result: [0 4 2 4 4 5]
  */
 
 package mayasage.algorithms.princeton.one;
@@ -73,6 +75,6 @@ public class UnionFindOne {
   }
 
   int count() {
-    return set.length;
+    return set.length - 1;
   }
 }

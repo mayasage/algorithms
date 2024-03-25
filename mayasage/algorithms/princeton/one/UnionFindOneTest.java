@@ -23,6 +23,6 @@ class UnionFindOneTest {
     assertEquals(4, uf.find(3));
     assertEquals(4, uf.find(4));
 
-    assertEquals(6, uf.count());
+    assertEquals(5, uf.count());
   }
 }
