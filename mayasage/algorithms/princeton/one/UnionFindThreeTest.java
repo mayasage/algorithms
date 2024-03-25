@@ -38,5 +38,38 @@ class UnionFindThreeTest {
     assertEquals(3, uf.find(3));
     assertEquals(2, uf.find(4));
     assertEquals(1, uf.find(5));
+
+    /*
+     * None of the choking will work here.
+     * Watch.
+     */
+    int n = 10_000_000;
+
+    /*
+     * Front-Back Choke
+     */
+    uf = new UnionFindThree(n);
+    for (int i = 1; i < n; i += 1) {
+      uf.union(i, i + 1);
+    }
+    for (int i = 0; i < n; i += 1) {
+      uf.connected(n, n);
+    }
+
+    /*
+     * Back-Front Choke
+     */
+    uf = new UnionFindThree(n);
+    for (int i = n; i > 1; i -= 1) {
+      uf.union(i - 1, i);
+    }
+    for (int i = 0; i < n; i += 1) {
+      uf.connected(n, n);
+    }
+
+    /*
+     * It won't work because the trees are balanced, no matter what you do.
+     * You can't unbalance them.
+     */
   }
 }
