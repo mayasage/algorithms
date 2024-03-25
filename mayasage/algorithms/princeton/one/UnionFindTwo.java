@@ -79,12 +79,12 @@ public class UnionFindTwo {
   }
 
   void union(int p, int q) {
-    if (connected(p, q)) return;
-
     int pRoot = root(p);
     int qRoot = root(q);
 
-    set[qRoot] = pRoot;
+    if (pRoot != qRoot) {
+      set[qRoot] = pRoot;
+    }
   }
 
   boolean connected(int p, int q) {
