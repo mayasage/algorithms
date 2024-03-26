@@ -74,10 +74,15 @@ public class UnionFindThree {
   }
 
   private int root(int p) {
-    while (set[p] != p) {
-      p = set[p];
+    int current = p;
+    int parent = set[p];
+
+    while (current != parent) {
+      current = parent;
+      parent = set[current];
     }
-    return p;
+
+    return current;
   }
 
   void union(int p, int q) {
