@@ -57,32 +57,32 @@ class UnionFindFourTest {
      */
 
     int n = 100_000_000;
-//
-//    /*
-//     * Front Choke
-//     */
-//    uf = new UnionFindFour(n);
-//
-//    for (int i = 1; i < n; i += 1) {
-//      uf.union(i, i + 1);
-//    }
-//
-//    for (int i = 0; i < n; i += 1) {
-//      uf.connected(n, n);
-//    }
-//
-//    /*
-//     * Back Choke
-//     */
-//    uf = new UnionFindFour(n);
-//
-//    for (int i = n; i > 1; i -= 1) {
-//      uf.union(i - 1, i);
-//    }
-//
-//    for (int i = 0; i < n; i += 1) {
-//      uf.connected(n, n);
-//    }
+
+    /*
+     * Front Choke
+     */
+    uf = new UnionFindFour(n);
+
+    for (int i = 1; i < n; i += 1) {
+      uf.union(i, i + 1);
+    }
+
+    for (int i = 0; i < n; i += 1) {
+      uf.connected(n, n);
+    }
+
+    /*
+     * Back Choke
+     */
+    uf = new UnionFindFour(n);
+
+    for (int i = n; i > 1; i -= 1) {
+      uf.union(i - 1, i);
+    }
+
+    for (int i = 0; i < n; i += 1) {
+      uf.connected(n, n);
+    }
 
     /*
      * It won't work because the trees are balanced, no matter what you do.
@@ -125,41 +125,132 @@ class UnionFindFourTest {
      */
 
     int l = (int) Math.ceil((double) n / 2);
-
-    uf = new UnionFindFour(n);
-
+    long startTime;
+    long endTime;
     int lengthOfList = 1;
+    String output;
+
+    /*
+     * startOfCurrentList U startOfNextList = 2s-
+     */
+    startTime = System.nanoTime();
+    uf = new UnionFindFour(n);
     for (int i = 0; i <= l; i += 1) {
       for (int j = 0; j <= n; ) {
         int startOfCurrentList = j;
-
-        int endOfCurrentList = Math.min(
-          (lengthOfList + startOfCurrentList - 1),
-          n
-        );
-
-        int endOfNextList = Math.min(
-          (lengthOfList * 2 + startOfCurrentList - 1),
-          n
-        );
-
         int startOfNextList = Math.min(
           (lengthOfList + startOfCurrentList),
           n
         );
-
         int startOfNextToNextList = (lengthOfList * 2 + startOfCurrentList);
-
-        uf.union(startOfCurrentList, endOfNextList);
-
+        uf.union(startOfCurrentList, startOfNextList);
         j = startOfNextToNextList;
       }
-
       lengthOfList = Math.min(lengthOfList * 2, n);
     }
-
     for (int i = 1; i <= n; i += 1) {
       uf.connected(n, n);
     }
+    endTime = System.nanoTime();
+    output = String.format(
+      "startOfCurrentList U startOfNextList = %.2f s",
+      (endTime - startTime) * 1e-9
+    );
+    System.out.println(output);
+
+    /*
+     * startOfCurrentList U endOfNextList = 2s+
+     */
+    startTime = System.nanoTime();
+    uf = new UnionFindFour(n);
+    lengthOfList = 1;
+    for (int i = 0; i <= l; i += 1) {
+      for (int j = 0; j <= n; ) {
+        int startOfCurrentList = j;
+        int endOfNextList = Math.min(
+          (lengthOfList * 2 + startOfCurrentList - 1),
+          n
+        );
+        int startOfNextToNextList = (lengthOfList * 2 + startOfCurrentList);
+        uf.union(startOfCurrentList, endOfNextList);
+        j = startOfNextToNextList;
+      }
+      lengthOfList = Math.min(lengthOfList * 2, n);
+    }
+    for (int i = 1; i <= n; i += 1) {
+      uf.connected(n, n);
+    }
+    endTime = System.nanoTime();
+    output = String.format(
+      "startOfCurrentList U endOfNextList = %.2f s",
+      (endTime - startTime) * 1e-9
+    );
+    System.out.println(output);
+
+    /*
+     * endOfCurrentList U startOfNextList = 2s+
+     */
+    startTime = System.nanoTime();
+    uf = new UnionFindFour(n);
+    lengthOfList = 1;
+    for (int i = 0; i <= l; i += 1) {
+      for (int j = 0; j <= n; ) {
+        int startOfCurrentList = j;
+        int endOfCurrentList = Math.min(
+          (lengthOfList + startOfCurrentList - 1),
+          n
+        );
+        int startOfNextList = Math.min(
+          (lengthOfList + startOfCurrentList),
+          n
+        );
+        int startOfNextToNextList = (lengthOfList * 2 + startOfCurrentList);
+        uf.union(endOfCurrentList, startOfNextList);
+        j = startOfNextToNextList;
+      }
+      lengthOfList = Math.min(lengthOfList * 2, n);
+    }
+    for (int i = 1; i <= n; i += 1) {
+      uf.connected(n, n);
+    }
+    endTime = System.nanoTime();
+    output = String.format(
+      "endOfCurrentList U startOfNextList = %.2f s",
+      (endTime - startTime) * 1e-9
+    );
+    System.out.println(output);
+
+    /*
+     * endOfCurrentList U endOfNextList = 2s+
+     */
+    startTime = System.nanoTime();
+    uf = new UnionFindFour(n);
+    lengthOfList = 1;
+    for (int i = 0; i <= l; i += 1) {
+      for (int j = 0; j <= n; ) {
+        int startOfCurrentList = j;
+        int endOfCurrentList = Math.min(
+          (lengthOfList + startOfCurrentList - 1),
+          n
+        );
+        int endOfNextList = Math.min(
+          (lengthOfList * 2 + startOfCurrentList - 1),
+          n
+        );
+        int startOfNextToNextList = (lengthOfList * 2 + startOfCurrentList);
+        uf.union(endOfCurrentList, endOfNextList);
+        j = startOfNextToNextList;
+      }
+      lengthOfList = Math.min(lengthOfList * 2, n);
+    }
+    for (int i = 1; i <= n; i += 1) {
+      uf.connected(n, n);
+    }
+    endTime = System.nanoTime();
+    output = String.format(
+      "endOfCurrentList U endOfNextList = %.2f s",
+      (endTime - startTime) * 1e-9
+    );
+    System.out.println(output);
   }
 }
