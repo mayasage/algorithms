@@ -42,8 +42,11 @@
  * This effectively makes the root(p) into O(logN), i.e., only search half
  * the tree at max.
  *
- * So for M union operations, the time complexity will become O(N + MLogN),
- * where N implies the initialization of N.
+ * So for M union operations, the *actual* running time complexity is
+ * O (N + MLogN).
+ * N is the time taken to read in the data.
+ *
+ * But just call it O(logN) for short.
  *
  * How does halving of nodes translate to logN ?
  * In short, everytime depth increases by 1, number of nodes nearly doubles.
