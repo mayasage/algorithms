@@ -56,33 +56,45 @@ class UnionFindFourTest {
      * Watch.
      */
 
-    int n = 100_000_000;
+    int n = 400_000_000;
+    long startTime;
+    long endTime;
+    String output;
 
     /*
-     * Front Choke
+     * Front Choke - 1.22s
      */
+    startTime = System.nanoTime();
     uf = new UnionFindFour(n);
-
     for (int i = 1; i < n; i += 1) {
       uf.union(i, i + 1);
     }
-
     for (int i = 0; i < n; i += 1) {
       uf.connected(n, n);
     }
+    endTime = System.nanoTime();
+    output = String.format(
+      "Front Choke = %.2f s",
+      (endTime - startTime) * 1e-9
+    );
+    System.out.println(output);
 
     /*
-     * Back Choke
+     * Back Choke - 2.33s
      */
     uf = new UnionFindFour(n);
-
     for (int i = n; i > 1; i -= 1) {
       uf.union(i - 1, i);
     }
-
     for (int i = 0; i < n; i += 1) {
       uf.connected(n, n);
     }
+    endTime = System.nanoTime();
+    output = String.format(
+      "Back Choke = %.2f s",
+      (endTime - startTime) * 1e-9
+    );
+    System.out.println(output);
 
     /*
      * It won't work because the trees are balanced, no matter what you do.
@@ -125,13 +137,10 @@ class UnionFindFourTest {
      */
 
     int l = (int) Math.ceil((double) n / 2);
-    long startTime;
-    long endTime;
     int lengthOfList = 1;
-    String output;
 
     /*
-     * startOfCurrentList U startOfNextList = 2s-
+     * startOfCurrentList U startOfNextList = 1.65s
      */
     startTime = System.nanoTime();
     uf = new UnionFindFour(n);
@@ -159,7 +168,7 @@ class UnionFindFourTest {
     System.out.println(output);
 
     /*
-     * startOfCurrentList U endOfNextList = 2s+
+     * startOfCurrentList U endOfNextList = 1.97s
      */
     startTime = System.nanoTime();
     uf = new UnionFindFour(n);
@@ -188,7 +197,7 @@ class UnionFindFourTest {
     System.out.println(output);
 
     /*
-     * endOfCurrentList U startOfNextList = 2s+
+     * endOfCurrentList U startOfNextList = 2.63s
      */
     startTime = System.nanoTime();
     uf = new UnionFindFour(n);
@@ -221,7 +230,7 @@ class UnionFindFourTest {
     System.out.println(output);
 
     /*
-     * endOfCurrentList U endOfNextList = 2s+
+     * endOfCurrentList U endOfNextList = 2.08s
      */
     startTime = System.nanoTime();
     uf = new UnionFindFour(n);
@@ -249,6 +258,23 @@ class UnionFindFourTest {
     endTime = System.nanoTime();
     output = String.format(
       "endOfCurrentList U endOfNextList = %.2f s",
+      (endTime - startTime) * 1e-9
+    );
+    System.out.println(output);
+
+    /*
+     * Back Choke - 2.48s
+     */
+    uf = new UnionFindFour(n);
+    for (int i = n; i > 1; i -= 1) {
+      uf.union(i - 1, i);
+    }
+    for (int i = 0; i < n; i += 1) {
+      uf.connected(i, i);
+    }
+    endTime = System.nanoTime();
+    output = String.format(
+      "Back Choke = %.2f s",
       (endTime - startTime) * 1e-9
     );
     System.out.println(output);

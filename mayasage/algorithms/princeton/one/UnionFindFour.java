@@ -39,6 +39,35 @@
  *   parent's parent thing, it wouldn't have flatted down the tree in
  *   one-shot... it would have required multiple root calls (as it does it
  *   one-step at a time).
+ *
+ * The actual running time-complexity of this algorithm is O(N + MLog*N).
+ * Don't ask me what the * is.
+ * Well ok, here it is:
+ * "number of times the log function must be iteratively applied before the
+ * result is less than or equal to 1"
+ *
+ * What does it mean ?
+ * It's like this:
+ * log(log(log(...log(N))))
+ * The number of times you had to log, is the answer.
+ * For practical purposes, consider this value 5.
+ *
+ *       N          log*N
+ *       1            0
+ *       2            1
+ *       4            2
+ *      16            3
+ *     65536          4
+ *    2^65536         5
+ *
+ * And actually the running time complexity can be further improved to something
+ * called O(N + M<alpha_symbol>(M, N)).
+ * This is called "Ackermann function".
+ *
+ * MASSIVELY beyond our scope.
+ *
+ * In short, you can treat Log*N as O(1).
+ * Making the overall time-complexity O(N + M).
  */
 
 package mayasage.algorithms.princeton.one;
