@@ -20,6 +20,10 @@
  * try to find the root of the tree, and find its max.
  * If it doesn't exist, then the node is its own tree (it hasn't been merged
  * with any other tree), so I just return the node itself.
+ *
+ * Time Complexity is the same as connected.
+ * O(Log*N) because the most expensive operation is root(), which gets
+ * reduced down due to path compression.
  */
 
 package mayasage.algorithms.princeton.one;
