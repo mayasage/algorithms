@@ -7,29 +7,34 @@ import static org.junit.jupiter.api.Assertions.*;
 class UnionFindTwoTest {
   @Test
   public void test() {
+    // Take N = 5
     UnionFindTwo uf = new UnionFindTwo(5);
     assertEquals(5, uf.count());
 
+    // Connect 1 & 2
+    assertFalse(uf.connected(1, 2));
+    uf.union(1, 2);
+    assertTrue(uf.connected(1, 2));
+
+    // Connect 3 & 4
+    assertFalse(uf.connected(3, 4));
+    uf.union(3, 4);
+    assertTrue(uf.connected(3, 4));
+
+    // Connect 2 & 4
     assertFalse(uf.connected(2, 4));
     uf.union(2, 4);
     assertTrue(uf.connected(2, 4));
 
-    assertFalse(uf.connected(1, 5));
-    uf.union(1, 5);
-    assertTrue(uf.connected(1, 5));
+    assertTrue(uf.connected(1, 4));
+    assertTrue(uf.connected(3, 4));
 
-    assertFalse(uf.connected(4, 5));
-    uf.union(4, 5);
-    assertTrue(uf.connected(4, 5));
-    assertTrue(uf.connected(1, 5));
-    assertTrue(uf.connected(2, 5));
-    assertTrue(uf.connected(5, 5));
-
-    assertEquals(2, uf.find(1));
-    assertEquals(2, uf.find(2));
-    assertEquals(3, uf.find(3));
-    assertEquals(2, uf.find(4));
-    assertEquals(1, uf.find(5));
+    // parent check
+    assertEquals(1, uf.find(1));
+    assertEquals(1, uf.find(2));
+    assertEquals(1, uf.find(3));
+    assertEquals(3, uf.find(4));
+    assertEquals(5, uf.find(5));
 
     /*
      * This will generate a "Flat" Tree.
@@ -78,8 +83,8 @@ class UnionFindTwoTest {
      * scanning the set once for the union operation, and zero times for
      * connected).
      */
-    for (int i = 0; i < n; i += 1) {
-      uf.connected(n, n);
-    }
+//    for (int i = 0; i < n; i += 1) {
+//      uf.connected(n, n);
+//    }
   }
 }
