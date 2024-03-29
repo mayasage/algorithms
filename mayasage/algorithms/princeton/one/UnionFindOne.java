@@ -1,4 +1,8 @@
 /*
+ * NOTE: All these UnionFind on the outside treats array to start from 1.
+ * So, there is no 0 element.
+ * Its [ 1 ... N ].
+ *
  * The problem we have:
  *
  * I have millions of nodes in a system.
