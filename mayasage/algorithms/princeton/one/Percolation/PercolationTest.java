@@ -1,4 +1,4 @@
-package mayasage.algorithms.princeton.one.Perlocation;
+package mayasage.algorithms.princeton.one.Percolation;
 
 import org.junit.jupiter.api.Test;
 

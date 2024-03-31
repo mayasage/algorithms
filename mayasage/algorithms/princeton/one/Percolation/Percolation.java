@@ -16,7 +16,7 @@
  * - white = true
  */
 
-package mayasage.algorithms.princeton.one.Perlocation;
+package mayasage.algorithms.princeton.one.Percolation;
 
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
