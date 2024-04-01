@@ -1,4 +1,4 @@
-package mayasage.algorithms.princeton.one;
+package mayasage.algorithms.princeton.one.UnionFind;
 
 import org.junit.jupiter.api.Test;
 

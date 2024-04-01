@@ -70,7 +70,7 @@
  * Making the overall time-complexity O(N + M).
  */
 
-package mayasage.algorithms.princeton.one;
+package mayasage.algorithms.princeton.one.UnionFind;
 
 public class UnionFindFour {
   private final int[] set;

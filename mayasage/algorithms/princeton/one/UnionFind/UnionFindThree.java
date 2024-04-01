@@ -57,7 +57,7 @@
  * union of 16 nodes : depth 5
  */
 
-package mayasage.algorithms.princeton.one;
+package mayasage.algorithms.princeton.one.UnionFind;
 
 public class UnionFindThree {
   private final int[] set;

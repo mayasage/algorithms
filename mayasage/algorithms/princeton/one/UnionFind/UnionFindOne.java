@@ -43,7 +43,7 @@
  * Result: [0 4 2 4 4 5]
  */
 
-package mayasage.algorithms.princeton.one;
+package mayasage.algorithms.princeton.one.UnionFind;
 
 public class UnionFindOne {
   private final int[] set;

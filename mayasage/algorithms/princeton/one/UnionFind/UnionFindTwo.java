@@ -59,7 +59,7 @@
  * The next algorithm will give us some guarantee to the length of the tree.
  */
 
-package mayasage.algorithms.princeton.one;
+package mayasage.algorithms.princeton.one.UnionFind;
 
 public class UnionFindTwo {
   private final int[] set;

@@ -1,14 +1,14 @@
-package mayasage.algorithms.princeton.one;
+package mayasage.algorithms.princeton.one.UnionFind;
 
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class UnionFindFourTest {
+class UnionFindSixTest {
   @Test
   public void test() {
     // Take N = 5
-    UnionFindFour uf = new UnionFindFour(5);
+    UnionFindSix uf = new UnionFindSix(5);
     assertEquals(5, uf.count());
 
     // Connect 1 & 2
@@ -51,12 +51,32 @@ class UnionFindFourTest {
     assertEquals(1, uf.find(4));
     assertEquals(5, uf.find(5));
 
+    // Test the new findConnectedMax.
+    uf = new UnionFindSix(6);
+    assertEquals(1, uf.findConnectedMax(1));
+    assertEquals(2, uf.findConnectedMax(2));
+    uf.union(1,2);
+    assertEquals(2, uf.findConnectedMax(1));
+    assertEquals(2, uf.findConnectedMax(2));
+
+    assertEquals(3, uf.findConnectedMax(3));
+    assertEquals(4, uf.findConnectedMax(4));
+    uf.union(3, 4);
+    assertEquals(4, uf.findConnectedMax(3));
+    assertEquals(4, uf.findConnectedMax(4));
+
+    uf.union(2, 4);
+    assertEquals(4, uf.findConnectedMax(1));
+    assertEquals(4, uf.findConnectedMax(2));
+    assertEquals(4, uf.findConnectedMax(3));
+    assertEquals(4, uf.findConnectedMax(4));
+
     /*
      * None of the previous choking will work here.
      * Watch.
      */
 
-    int n = 400_000_000;
+    int n = 10_000_000;
     long startTime;
     long endTime;
     String output;
@@ -65,7 +85,7 @@ class UnionFindFourTest {
      * Front Choke - 1.22s
      */
     startTime = System.nanoTime();
-    uf = new UnionFindFour(n);
+    uf = new UnionFindSix(n);
     for (int i = 1; i < n; i += 1) {
       uf.union(i, i + 1);
     }
@@ -82,7 +102,7 @@ class UnionFindFourTest {
     /*
      * Back Choke - 2.33s
      */
-    uf = new UnionFindFour(n);
+    uf = new UnionFindSix(n);
     for (int i = n; i > 1; i -= 1) {
       uf.union(i - 1, i);
     }
@@ -143,7 +163,7 @@ class UnionFindFourTest {
      * startOfCurrentList U startOfNextList = 1.65s
      */
     startTime = System.nanoTime();
-    uf = new UnionFindFour(n);
+    uf = new UnionFindSix(n);
     for (int i = 0; i <= l; i += 1) {
       for (int j = 0; j <= n; ) {
         int startOfCurrentList = j;
@@ -171,7 +191,7 @@ class UnionFindFourTest {
      * startOfCurrentList U endOfNextList = 1.97s
      */
     startTime = System.nanoTime();
-    uf = new UnionFindFour(n);
+    uf = new UnionFindSix(n);
     lengthOfList = 1;
     for (int i = 0; i <= l; i += 1) {
       for (int j = 0; j <= n; ) {
@@ -200,7 +220,7 @@ class UnionFindFourTest {
      * endOfCurrentList U startOfNextList = 2.63s
      */
     startTime = System.nanoTime();
-    uf = new UnionFindFour(n);
+    uf = new UnionFindSix(n);
     lengthOfList = 1;
     for (int i = 0; i <= l; i += 1) {
       for (int j = 0; j <= n; ) {
@@ -233,7 +253,7 @@ class UnionFindFourTest {
      * endOfCurrentList U endOfNextList = 2.08s
      */
     startTime = System.nanoTime();
-    uf = new UnionFindFour(n);
+    uf = new UnionFindSix(n);
     lengthOfList = 1;
     for (int i = 0; i <= l; i += 1) {
       for (int j = 0; j <= n; ) {
@@ -265,7 +285,7 @@ class UnionFindFourTest {
     /*
      * Back Choke - 2.48s
      */
-    uf = new UnionFindFour(n);
+    uf = new UnionFindSix(n);
     for (int i = n; i > 1; i -= 1) {
       uf.union(i - 1, i);
     }

@@ -10,7 +10,7 @@
  * waveringly treat Log*N as O(1), making the time complexity O(N + M).
  */
 
-package mayasage.algorithms.princeton.one;
+package mayasage.algorithms.princeton.one.UnionFind;
 
 public class UnionFindFive {
   private final int[] set;

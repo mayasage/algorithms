@@ -26,7 +26,7 @@
  * reduced down due to path compression.
  */
 
-package mayasage.algorithms.princeton.one;
+package mayasage.algorithms.princeton.one.UnionFind;
 
 import java.util.HashMap;
 
