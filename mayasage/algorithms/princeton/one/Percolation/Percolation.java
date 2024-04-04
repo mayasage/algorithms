@@ -28,7 +28,7 @@ public class Percolation {
   final private int topVirtualNodeIndex;
   final private int bottomVirtualNodeIndex;
 
-  Percolation(int n) {
+  public Percolation(int n) {
     if (n <= 0) {
       throw new IllegalArgumentException("Invalid grid dimensions");
     }
