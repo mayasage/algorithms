@@ -21,12 +21,12 @@ package mayasage.algorithms.princeton.one.Percolation;
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
-  final private boolean[][] grid;
-  final private WeightedQuickUnionUF uf;
+  private final boolean[][] grid;
+  private final WeightedQuickUnionUF uf;
   private int openCount = 0;
-  final private int n;
-  final private int topVirtualNodeIndex;
-  final private int bottomVirtualNodeIndex;
+  private final int n;
+  private final int topVirtualNodeIndex;
+  private final int bottomVirtualNodeIndex;
 
   public Percolation(int n) {
     if (n <= 0) {
