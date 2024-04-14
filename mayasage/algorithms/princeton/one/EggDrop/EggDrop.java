@@ -9,5 +9,8 @@ abstract class EggDrop {
     return currentFloor >= firstBreakFloor;
   }
 
-  abstract void simulate(int numFloors, int firstBreakFloor);
+  /**
+   * @return Number of egg tosses.
+   */
+  abstract int simulate(int numFloors, int firstBreakFloor);
 }
