@@ -1,29 +1,38 @@
 package mayasage.algorithms.princeton.one.EggDrop;
 
-import edu.princeton.cs.algs4.Stopwatch;
 import org.junit.jupiter.api.Test;
 
-class EggDropOneTest extends EggDropTest {
+import static org.junit.jupiter.api.Assertions.*;
+
+class EggDropOneTest {
+  void edgeCases(EggDrop eggDrop) {
+    assertEquals(-1, eggDrop.simulate(0, 0));
+    assertEquals(-1, eggDrop.simulate(0, 1));
+    assertEquals(-1, eggDrop.simulate(1, 0));
+    assertEquals(-1, eggDrop.simulate(1, 2));
+
+    assertEquals(1, eggDrop.simulate(1, 1));
+
+    assertEquals(1, eggDrop.simulate(1, 1));
+    assertEquals(2, eggDrop.simulate(2, 2));
+
+    assertEquals(1, eggDrop.simulate(3, 1));
+    assertEquals(2, eggDrop.simulate(3, 2));
+    assertEquals(3, eggDrop.simulate(3, 3));
+  }
+
+  void performance(EggDrop eggDrop) {
+    assertEquals(
+      900_000_000,
+      eggDrop.simulate(1_000_000_000, 900_000_000)
+    );
+  }
+
   @Test
-  void run() {
-    EggDropOne eggDrop = new EggDropOne();
+  void simulate() {
+    EggDrop eggDrop = new EggDropOne();
 
-    Stopwatch watch = new Stopwatch();
-
-    runNSimulations(
-      eggDrop,
-      1_000_000_000,
-      1_000_000_000,
-      1_000_000_000
-    );
-
-    runNSimulations(
-      eggDrop,
-      2_000_000_000,
-      2_000_000_000,
-      2_000_000_000
-    );
-
-    System.out.println(watch.elapsedTime());
+    edgeCases(eggDrop);
+    performance(eggDrop);
   }
 }

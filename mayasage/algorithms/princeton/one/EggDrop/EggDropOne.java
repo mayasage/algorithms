@@ -9,14 +9,21 @@
 package mayasage.algorithms.princeton.one.EggDrop;
 
 public class EggDropOne extends EggDrop {
-  public void simulate(int numFloors, int firstBreakFloor) {
-    if (numFloors < 1) return;
-    if (firstBreakFloor < 1) return;
+  @Override
+  public int simulate(int numFloors, int firstBreakFloor) {
+    if (numFloors < 1) return -1;
+    if (firstBreakFloor < 1) return -1;
+    if (firstBreakFloor > numFloors) return -1;
 
-    for (int currentFloor = 1; currentFloor < numFloors; currentFloor += 1) {
+    int tosses = 0;
+
+    for (int currentFloor = 1; currentFloor <= numFloors; currentFloor += 1) {
+      tosses += 1;
       if (throwEgg(currentFloor, firstBreakFloor)) {
-        return;
+        break;
       }
     }
+
+    return tosses;
   }
 }
