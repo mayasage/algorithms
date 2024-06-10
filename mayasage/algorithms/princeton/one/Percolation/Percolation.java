@@ -67,7 +67,7 @@ public class Percolation {
     int index = turnRowColToIndex(row, col);
     int leftBoundary = row * n;
     int rightBoundary = leftBoundary + n - 1;
-    
+
     int left = index - 1;
     int right = index + 1;
     int top = index - n;
@@ -114,7 +114,14 @@ public class Percolation {
 
   // does the system percolate?
   public boolean percolates() {
-    return uf.find(topVirtualNodeIndex) == uf.find(bottomVirtualNodeIndex);
+    boolean eq =
+      uf.find(topVirtualNodeIndex) == uf.find(bottomVirtualNodeIndex);
+
+    return (
+      n == 1
+        ? eq && isOpen(1, 1)
+        : eq
+    );
   }
 
   private void validate(int row, int col) {
