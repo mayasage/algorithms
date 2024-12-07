@@ -28,22 +28,18 @@ Constraints:
 package mayasage.algorithms.leetcode;
 
 public class Q53_MaximumSubarray {
-  /**
-   * Walk left to right O(N) with 2 variables: currentSum and totalSum.
-   * @param nums min length should be 1
-   * @return sum
-   */
-  public static int on(int[] nums) {
-    int n = nums.length;
-    if (n == 0) return 0;
-    int r = nums[0];
-    int c = nums[0];
-    for (int i = 1; i < n; i += 1) {
-      int x = nums[i];
-      if (c < 0) c = 0;
-      c += x;
-      if (c > r) r = c;
-    }
-    return r;
-  }
+        /**
+         * @param nums min length should be 1
+         * @return sum
+         */
+        public static int on(int[] nums) {
+                int maxSum = Integer.MIN_VALUE;
+                int sum = 0;
+                for (int x : nums) {
+                        int newSum = sum + x;
+                        sum = Math.max(newSum, x); // reset
+                        maxSum = Math.max(maxSum, sum);
+                }
+                return maxSum;
+        }
 }
