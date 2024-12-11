@@ -30,22 +30,18 @@ Constraints:
 package mayasage.algorithms.leetcode;
 
 public class Q121_BestTimeToBuyAndSellStock {
-  /**
-   * Walk left to right O(N) with 2 variables: profit and lastCheapestPrice.
-   * @param prices .
-   * @return profit
-   */
-  public int on(int[] prices) {
-    int n = prices.length;
-    if (n == 0) return 0;
-    int r = 0;
-    int m = prices[0];
-    for (int i = 1; i < n; i += 1) {
-      int x = prices[i];
-      int p = x - m;
-      if (p > r) r = p;
-      if (x < m) m = x;
-    }
-    return r;
-  }
+        /**
+         * @param prices .
+         * @return maxProfit
+         */
+        public static int on(int[] prices) {
+                int maxProfit = Integer.MIN_VALUE;
+                int maxOnRight = Integer.MIN_VALUE;
+                for (int i = prices.length - 1; i >= 0; i--) {
+                        int x = prices[i];
+                        maxOnRight = Math.max(maxOnRight, x);
+                        maxProfit = Math.max(maxProfit, maxOnRight - x);
+                }
+                return maxProfit;
+        }
 }
