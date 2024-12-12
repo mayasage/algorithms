@@ -7,10 +7,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-record TestCase(int[] nums, int max) {
-}
-
 class Q152_MaximumProductSubarrayTest {
+        record TestCase(int[] nums, int max) {
+        }
 
         List<TestCase> getTestCases() {
                 List<TestCase> testCases = new ArrayList<>();
