@@ -9,8 +9,20 @@ Also requires "org.junit.jupiter:junit-jupiter:5.8.1".
 Easiest way is to open any test file, hover over any import with "jupiter" written on it,
 and let intellij handle the rest.
 
+## A Note on Time Complexity
+
+Why is O(N^2) such a bad time complexity?  
+Suppose my input is one billion, and it takes 10 nanoseconds per input.
+
+The Total time taken  
+= 1 billion ^ 2 * 10 nanoseconds  
+= 1 billion ^ 2 * 10 ^ -8 seconds  
+= 10 billion / (60 * 60 * 24 * 365) years  
+= 317 years
+
 ## Topics to Redo
 
 - Percolation: You scored 89%.  
   Missed a few test cases.  
   Move on for now, but come back later.
+

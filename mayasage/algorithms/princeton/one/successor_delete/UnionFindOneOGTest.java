@@ -1,81 +1,18 @@
-package mayasage.algorithms.princeton.one.union_find;
+package mayasage.algorithms.princeton.one.successor_delete;
 
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class UnionFindSixTest {
-  @Test
-  public void test() {
-    // Take N = 5
-    UnionFindSix uf = new UnionFindSix(5);
-    assertEquals(5, uf.count());
-
-    // Connect 1 & 2
-    assertFalse(uf.connected(1, 2));
-    uf.union(1, 2);
-    assertTrue(uf.connected(1, 2));
-
-    assertEquals(2, uf.children(1));
-    assertEquals(1, uf.children(2));
-
-    // Connect 3 & 4
-    assertFalse(uf.connected(3, 4));
-    uf.union(3, 4);
-    assertTrue(uf.connected(3, 4));
-
-    assertEquals(2, uf.children(3));
-    assertEquals(1, uf.children(4));
-
-    // Connect 2 & 4
-    assertFalse(uf.connected(2, 4));
-    uf.union(2, 4);
-    assertEquals(2, uf.children(3));
-    assertTrue(uf.connected(2, 4));
-    assertEquals(1, uf.children(3));
-
-    assertTrue(uf.connected(1, 4));
-    assertTrue(uf.connected(3, 4));
-
-    // children count
-    assertEquals(4, uf.children(1));
-    assertEquals(1, uf.children(2));
-    assertEquals(1, uf.children(3));
-    assertEquals(1, uf.children(4));
-    assertEquals(1, uf.children(5));
-
-    // parent check
-    assertEquals(1, uf.find(1));
-    assertEquals(1, uf.find(2));
-    assertEquals(1, uf.find(3));
-    assertEquals(1, uf.find(4));
-    assertEquals(5, uf.find(5));
-
-    // Test the new findConnectedMax.
-    uf = new UnionFindSix(6);
-    assertEquals(1, uf.findConnectedMax(1));
-    assertEquals(2, uf.findConnectedMax(2));
-    uf.union(1,2);
-    assertEquals(2, uf.findConnectedMax(1));
-    assertEquals(2, uf.findConnectedMax(2));
-
-    assertEquals(3, uf.findConnectedMax(3));
-    assertEquals(4, uf.findConnectedMax(4));
-    uf.union(3, 4);
-    assertEquals(4, uf.findConnectedMax(3));
-    assertEquals(4, uf.findConnectedMax(4));
-
-    uf.union(2, 4);
-    assertEquals(4, uf.findConnectedMax(1));
-    assertEquals(4, uf.findConnectedMax(2));
-    assertEquals(4, uf.findConnectedMax(3));
-    assertEquals(4, uf.findConnectedMax(4));
+class UnionFindOneOGTest {
+  private void loadTest() {
 
     /*
      * None of the previous choking will work here.
      * Watch.
      */
 
+    UnionFindOne uf;
     int n = 10_000_000;
     long startTime;
     long endTime;
@@ -85,12 +22,12 @@ class UnionFindSixTest {
      * Front Choke - 1.22s
      */
     startTime = System.nanoTime();
-    uf = new UnionFindSix(n);
-    for (int i = 1; i < n; i += 1) {
+    uf = new UnionFindOne(n);
+    for (int i = 1; i < n - 1; i += 1) {
       uf.union(i, i + 1);
     }
     for (int i = 0; i < n; i += 1) {
-      uf.connected(n, n);
+      uf.connected(n - 1, n - 1);
     }
     endTime = System.nanoTime();
     output = String.format(
@@ -102,12 +39,12 @@ class UnionFindSixTest {
     /*
      * Back Choke - 2.33s
      */
-    uf = new UnionFindSix(n);
-    for (int i = n; i > 1; i -= 1) {
+    uf = new UnionFindOne(n);
+    for (int i = n - 1; i > 0; i -= 1) {
       uf.union(i - 1, i);
     }
-    for (int i = 0; i < n; i += 1) {
-      uf.connected(n, n);
+    for (int i = 0; i < n - 1; i += 1) {
+      uf.connected(n - 1, n - 1);
     }
     endTime = System.nanoTime();
     output = String.format(
@@ -163,22 +100,22 @@ class UnionFindSixTest {
      * startOfCurrentList U startOfNextList = 1.65s
      */
     startTime = System.nanoTime();
-    uf = new UnionFindSix(n);
+    uf = new UnionFindOne(n);
     for (int i = 0; i <= l; i += 1) {
-      for (int j = 0; j <= n; ) {
+      for (int j = 0; j < n; ) {
         int startOfCurrentList = j;
         int startOfNextList = Math.min(
           (lengthOfList + startOfCurrentList),
-          n
+          n - 1
         );
         int startOfNextToNextList = (lengthOfList * 2 + startOfCurrentList);
         uf.union(startOfCurrentList, startOfNextList);
         j = startOfNextToNextList;
       }
-      lengthOfList = Math.min(lengthOfList * 2, n);
+      lengthOfList = Math.min(lengthOfList * 2, n - 1);
     }
-    for (int i = 1; i <= n; i += 1) {
-      uf.connected(n, n);
+    for (int i = 0; i < n; i += 1) {
+      uf.connected(n - 1, n - 1);
     }
     endTime = System.nanoTime();
     output = String.format(
@@ -191,23 +128,23 @@ class UnionFindSixTest {
      * startOfCurrentList U endOfNextList = 1.97s
      */
     startTime = System.nanoTime();
-    uf = new UnionFindSix(n);
+    uf = new UnionFindOne(n);
     lengthOfList = 1;
     for (int i = 0; i <= l; i += 1) {
-      for (int j = 0; j <= n; ) {
+      for (int j = 0; j < n; ) {
         int startOfCurrentList = j;
         int endOfNextList = Math.min(
           (lengthOfList * 2 + startOfCurrentList - 1),
-          n
+          n - 1
         );
         int startOfNextToNextList = (lengthOfList * 2 + startOfCurrentList);
         uf.union(startOfCurrentList, endOfNextList);
         j = startOfNextToNextList;
       }
-      lengthOfList = Math.min(lengthOfList * 2, n);
+      lengthOfList = Math.min(lengthOfList * 2, n - 1);
     }
-    for (int i = 1; i <= n; i += 1) {
-      uf.connected(n, n);
+    for (int i = 0; i < n; i += 1) {
+      uf.connected(n - 1, n - 1);
     }
     endTime = System.nanoTime();
     output = String.format(
@@ -220,27 +157,27 @@ class UnionFindSixTest {
      * endOfCurrentList U startOfNextList = 2.63s
      */
     startTime = System.nanoTime();
-    uf = new UnionFindSix(n);
+    uf = new UnionFindOne(n);
     lengthOfList = 1;
     for (int i = 0; i <= l; i += 1) {
-      for (int j = 0; j <= n; ) {
+      for (int j = 0; j < n; ) {
         int startOfCurrentList = j;
         int endOfCurrentList = Math.min(
           (lengthOfList + startOfCurrentList - 1),
-          n
+          n - 1
         );
         int startOfNextList = Math.min(
           (lengthOfList + startOfCurrentList),
-          n
+          n - 1
         );
         int startOfNextToNextList = (lengthOfList * 2 + startOfCurrentList);
         uf.union(endOfCurrentList, startOfNextList);
         j = startOfNextToNextList;
       }
-      lengthOfList = Math.min(lengthOfList * 2, n);
+      lengthOfList = Math.min(lengthOfList * 2, n - 1);
     }
-    for (int i = 1; i <= n; i += 1) {
-      uf.connected(n, n);
+    for (int i = 0; i < n; i += 1) {
+      uf.connected(n - 1, n - 1);
     }
     endTime = System.nanoTime();
     output = String.format(
@@ -253,27 +190,27 @@ class UnionFindSixTest {
      * endOfCurrentList U endOfNextList = 2.08s
      */
     startTime = System.nanoTime();
-    uf = new UnionFindSix(n);
+    uf = new UnionFindOne(n);
     lengthOfList = 1;
     for (int i = 0; i <= l; i += 1) {
-      for (int j = 0; j <= n; ) {
+      for (int j = 0; j < n; ) {
         int startOfCurrentList = j;
         int endOfCurrentList = Math.min(
           (lengthOfList + startOfCurrentList - 1),
-          n
+          n - 1
         );
         int endOfNextList = Math.min(
           (lengthOfList * 2 + startOfCurrentList - 1),
-          n
+          n - 1
         );
         int startOfNextToNextList = (lengthOfList * 2 + startOfCurrentList);
         uf.union(endOfCurrentList, endOfNextList);
         j = startOfNextToNextList;
       }
-      lengthOfList = Math.min(lengthOfList * 2, n);
+      lengthOfList = Math.min(lengthOfList * 2, n - 1);
     }
-    for (int i = 1; i <= n; i += 1) {
-      uf.connected(n, n);
+    for (int i = 0; i < n; i += 1) {
+      uf.connected(n - 1, n - 1);
     }
     endTime = System.nanoTime();
     output = String.format(
@@ -285,8 +222,8 @@ class UnionFindSixTest {
     /*
      * Back Choke - 2.48s
      */
-    uf = new UnionFindSix(n);
-    for (int i = n; i > 1; i -= 1) {
+    uf = new UnionFindOne(n);
+    for (int i = n - 1; i > 0; i -= 1) {
       uf.union(i - 1, i);
     }
     for (int i = 0; i < n; i += 1) {
@@ -298,5 +235,89 @@ class UnionFindSixTest {
       (endTime - startTime) * 1e-9
     );
     System.out.println(output);
+  }
+
+  @Test
+  public void test() {
+    // Take N = 5
+    int n = 5;
+
+    UnionFindOne uf = new UnionFindOne(n);
+    assertEquals(4, uf.count());
+    for (int i = 0; i < n; i += 1) {
+      assertEquals(i, uf.getSetMax(i));
+    }
+
+    // Connect 0 & 1
+    assertEquals(0, uf.getSetMax(0));
+    assertEquals(1, uf.getSetMax(1));
+
+    assertFalse(uf.connected(0, 1));
+    uf.union(0, 1);
+    assertTrue(uf.connected(0, 1));
+
+    assertEquals(2, uf.children(0));
+    assertEquals(1, uf.children(1));
+
+    assertEquals(1, uf.getSetMax(0));
+    assertEquals(1, uf.getSetMax(1));
+
+    // Connect 2 & 3
+    assertEquals(2, uf.getSetMax(2));
+    assertEquals(3, uf.getSetMax(3));
+
+    assertFalse(uf.connected(2, 3));
+    uf.union(2, 3);
+    assertTrue(uf.connected(2, 3));
+
+    assertEquals(2, uf.children(2));
+    assertEquals(1, uf.children(3));
+
+    assertEquals(3, uf.getSetMax(2));
+    assertEquals(3, uf.getSetMax(3));
+
+    // Connect 1 & 3
+    assertEquals(1, uf.getSetMax(0));
+    assertEquals(1, uf.getSetMax(1));
+    assertEquals(3, uf.getSetMax(2));
+    assertEquals(3, uf.getSetMax(3));
+
+    assertFalse(uf.connected(1, 3));
+    uf.union(1, 3);
+    assertEquals(1, uf.children(3));
+
+    assertTrue(uf.connected(1, 3));
+    assertEquals(1, uf.children(3));
+
+    assertTrue(uf.connected(1, 3));
+    assertTrue(uf.connected(3, 3));
+
+    assertEquals(3, uf.getSetMax(0));
+    assertEquals(3, uf.getSetMax(1));
+    assertEquals(3, uf.getSetMax(2));
+    assertEquals(3, uf.getSetMax(3));
+
+    // children count
+    assertEquals(4, uf.children(0));
+    assertEquals(1, uf.children(1));
+    assertEquals(1, uf.children(2));
+    assertEquals(1, uf.children(3));
+    assertEquals(1, uf.children(4));
+
+    // parent check
+    assertEquals(0, uf.parent(0));
+    assertEquals(0, uf.parent(1));
+    assertEquals(0, uf.parent(2));
+    assertEquals(0, uf.parent(3));
+    assertEquals(4, uf.parent(4));
+
+    // max check
+    assertEquals(3, uf.getSetMax(0));
+    assertEquals(3, uf.getSetMax(1));
+    assertEquals(3, uf.getSetMax(2));
+    assertEquals(3, uf.getSetMax(3));
+    assertEquals(4, uf.getSetMax(4));
+
+    loadTest();
   }
 }

@@ -26,7 +26,7 @@
  * reduced down due to path compression.
  */
 
-package mayasage.algorithms.princeton.one.union_find;
+package mayasage.algorithms.princeton.one.connect_nodes_in_a_network;
 
 import java.util.HashMap;
 
