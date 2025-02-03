@@ -1,9 +1,9 @@
 package mayasage.algorithms.princeton.one.connect_nodes_in_a_network;
 
-public class SolutionOne implements Solution {
+public class UnionFindOne implements UnionFind {
         private final int[] connectionIds;
 
-        public SolutionOne(int networkSize) {
+        public UnionFindOne(int networkSize) {
                 connectionIds = new int[networkSize];
                 for (int i = 0; i < networkSize; i++) {
                         connectionIds[i] = i;
