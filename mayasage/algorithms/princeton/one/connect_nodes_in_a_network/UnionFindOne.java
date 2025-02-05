@@ -1,6 +1,6 @@
 package mayasage.algorithms.princeton.one.connect_nodes_in_a_network;
 
-public class UnionFindOne implements UnionFind {
+public class UnionFindOne implements IUnionFind {
         private final int[] connectionIds;
 
         public UnionFindOne(int networkSize) {
