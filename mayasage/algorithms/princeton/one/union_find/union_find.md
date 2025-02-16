@@ -1,4 +1,4 @@
-# Connect Nodes In a Network
+# Union Find
 
 ## The Problem
 

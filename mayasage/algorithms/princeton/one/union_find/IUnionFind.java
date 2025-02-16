@@ -1,4 +1,4 @@
-package mayasage.algorithms.princeton.one.connect_nodes_in_a_network;
+package mayasage.algorithms.princeton.one.union_find;
 
 public interface IUnionFind {
         void connectTwoNodes(int node1Position, int node2Position);
