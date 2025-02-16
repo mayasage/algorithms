@@ -1,140 +1,111 @@
-/*
- * You are given an N*N grid.
- * Initially, every element in the grid is black.
- * Randomly, elements in the grid will go white.
- *
- * A system "Percolates" if any element in the top row is connected to the
- * bottom row through these whites.
- *
- * Imagine a 5 * 5 grid, but in array format.
- *
- * [0 1 2 3 4   5 6 7 8 9   10 11 12 13 14   15 16 17 18 19   20 21 22 23 24]
- *
- * First of all I need something to store these whites & blacks.
- * A boolean array will be good.
- * - black = false
- * - white = true
- */
-
 package mayasage.algorithms.princeton.one.percolation;
 
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
-public class Percolation {
-  private final boolean[][] grid;
-  private final WeightedQuickUnionUF uf;
-  private int openCount = 0;
-  private final int n;
-  private final int topVirtualNodeIndex;
-  private final int bottomVirtualNodeIndex;
+public class Percolation implements IPercolation {
+        private final boolean[][] grid;
+        private int numberOfOpenSites = 0;
+        private final WeightedQuickUnionUF uf;
+        private final int topNodeIndex;
+        private final int bottomNodeIndex;
 
-  public Percolation(int n) {
-    if (n <= 0) {
-      throw new IllegalArgumentException("Invalid grid dimensions");
-    }
+        public Percolation(int n) {
+                if (n < 1) throw new IllegalArgumentException();
+                grid = new boolean[n][n];
+                uf = new WeightedQuickUnionUF(n * n + 2);
+                topNodeIndex = n * n;
+                bottomNodeIndex = n * n + 1;
+        }
 
-    this.n = n;
-    topVirtualNodeIndex = n * n;
-    bottomVirtualNodeIndex = n * n + 1;
+        @Override
+        public void open(int row, int col) {
+                validate(row, col);
+                row--;
+                col--;
+                if (grid[row][col]) return;
+                grid[row][col] = true;
+                numberOfOpenSites++;
+                connectTopBottom(row, col);
+                connectUpDownLeftRight(row, col);
+        }
 
-    grid = new boolean[n][n];
+        @Override
+        public boolean isOpen(int row, int col) {
+                validate(row, col);
+                row--;
+                col--;
+                return grid[row][col];
+        }
 
-    /*
-     * 2 extra for top and bottom virtual nodes.
-     */
-    uf = new WeightedQuickUnionUF(n * n + 2);
+        @Override
+        public boolean isFull(int row, int col) {
+                validate(row, col);
+                row--;
+                col--;
+                return uf.find(topNodeIndex) == uf.find(findPositionInUf(row, col));
+        }
 
-    for (int i = 0; i < n; i += 1) {
-      uf.union(topVirtualNodeIndex, i);
-    }
+        @Override
+        public int numberOfOpenSites() {
+                return numberOfOpenSites;
+        }
 
-    for (int i = n * n - 1; i >= n * n - n; i -= 1) {
-      uf.union(bottomVirtualNodeIndex, i);
-    }
-  }
+        @Override
+        public boolean percolates() {
+                return uf.find(topNodeIndex) == uf.find(bottomNodeIndex);
+        }
 
-  // opens the site (row, col) if it is not open already
-  public void open(int row, int col) {
-    // Our matrix is 0-based, user input is 1-based.
-    row -= 1;
-    col -= 1;
-    validate(row, col);
+        private void validate(int... rowOrCols) {
+                for (int value : rowOrCols) {
+                        if (value < 1 || value > grid.length) {
+                                throw new IllegalArgumentException("Invalid row or column: " + value);
+                        }
+                }
+        }
 
-    if (grid[row][col]) return;
-    grid[row][col] = true;
-    openCount += 1;
+        private void connectTopBottom(int row, int col) {
+                int positionInUf = findPositionInUf(row, col);
+                if (row == 0) {
+                        uf.union(topNodeIndex, positionInUf);
+                }
+                if (row == grid.length - 1) {
+                        uf.union(bottomNodeIndex, positionInUf);
+                }
+        }
 
-    int index = turnRowColToIndex(row, col);
-    int leftBoundary = row * n;
-    int rightBoundary = leftBoundary + n - 1;
+        private void connectUpDownLeftRight(int row, int col) {
+                int positionInUf = findPositionInUf(row, col);
+                if (row - 1 >= 0 && grid[row - 1][col]) {
+                        uf.union(positionInUf, findPositionAboveInUf(row, col));
+                }
+                if (row + 1 < grid.length && grid[row + 1][col]) {
+                        uf.union(positionInUf, findPositionBelowInUf(row, col));
+                }
+                if (col - 1 >= 0 && grid[row][col - 1]) {
+                        uf.union(positionInUf, findPositionToLeftInUf(row, col));
+                }
+                if (col + 1 < grid.length && grid[row][col + 1]) {
+                        uf.union(positionInUf, findPositionToRightInUf(row, col));
+                }
+        }
 
-    int left = index - 1;
-    int right = index + 1;
-    int top = index - n;
-    int bottom = index + n;
+        private int findPositionInUf(int row, int col) {
+                return row * grid.length + col;
+        }
 
-    if (left >= leftBoundary && grid[row][col - 1]) {
-      uf.union(index, left);
-    }
+        private int findPositionAboveInUf(int row, int col) {
+                return (row - 1) * grid.length + col;
+        }
 
-    if (right <= rightBoundary && grid[row][col + 1]) {
-      uf.union(index, right);
-    }
+        private int findPositionBelowInUf(int row, int col) {
+                return (row + 1) * grid.length + col;
+        }
 
-    if (top >= 0 && grid[row - 1][col]) {
-      uf.union(index, top);
-    }
+        private int findPositionToLeftInUf(int row, int col) {
+                return row * grid.length + col - 1;
+        }
 
-    if (bottom < n * n && grid[row + 1][col]) {
-      uf.union(index, bottom);
-    }
-  }
-
-  // is the site (row, col) open?
-  public boolean isOpen(int row, int col) {
-    row -= 1;
-    col -= 1;
-    validate(row, col);
-    return grid[row][col];
-  }
-
-  // is the site (row, col) full?
-  public boolean isFull(int row, int col) {
-    row -= 1;
-    col -= 1;
-    validate(row, col);
-    int index = turnRowColToIndex(row, col);
-    return grid[row][col] && uf.find(topVirtualNodeIndex) == uf.find(index);
-  }
-
-  // returns the number of open sites
-  public int numberOfOpenSites() {
-    return openCount;
-  }
-
-  // does the system percolate?
-  public boolean percolates() {
-    boolean eq =
-      uf.find(topVirtualNodeIndex) == uf.find(bottomVirtualNodeIndex);
-
-    return (
-      n == 1
-        ? eq && isOpen(1, 1)
-        : eq
-    );
-  }
-
-  private void validate(int row, int col) {
-    if (row < 0 || row >= n) {
-      throw new IllegalArgumentException("row out of bounds");
-    }
-
-    if (col < 0 || col >= n) {
-      throw new IllegalArgumentException("col out of bounds");
-    }
-  }
-
-  private int turnRowColToIndex(int row, int col) {
-    return row * n + col;
-  }
+        private int findPositionToRightInUf(int row, int col) {
+                return row * grid.length + col + 1;
+        }
 }

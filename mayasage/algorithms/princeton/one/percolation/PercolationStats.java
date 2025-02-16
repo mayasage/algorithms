@@ -4,73 +4,58 @@ import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
 
 public class PercolationStats {
-  private static final double CONFIDENCE_95 = 1.96;
+        private final double mean;
+        private final double stdDev;
+        private final double confidenceLo;
+        private final double confidenceHi;
 
-  private final double[] numOpenSites;
-  private final int trials;
+        public PercolationStats(int n, int trials) {
+                if (n < 1 || trials < 1) {
+                        throw new IllegalArgumentException();
+                }
+                double[] openSitesToTotalSites = new double[trials];
+                for (int i = 0; i < trials; i++) {
+                        openSitesToTotalSites[i] = (double) runTrial(n) / (n * n);
+                }
+                mean = StdStats.mean(openSitesToTotalSites);
+                stdDev = StdStats.stddev(openSitesToTotalSites);
+                confidenceLo = mean - ((1.96 * stdDev) / Math.sqrt(trials));
+                confidenceHi = mean + ((1.96 * stdDev) / Math.sqrt(trials));
+        }
 
-  // perform independent trials on an n-by-n grid
-  public PercolationStats(int n, int trials) {
-    if (n <= 0) {
-      throw new IllegalArgumentException("Grid size must be more than 0!");
-    }
+        public static void main(String[] args) {
+                int n = Integer.parseInt(args[0]);
+                int trials = Integer.parseInt(args[1]);
+                PercolationStats ps = new PercolationStats(n, trials);
+                System.out.printf("%-25s = %.18f%n", "mean", ps.mean());
+                System.out.printf("%-25s = %.18f%n", "stddev", ps.stddev());
+                System.out.printf("%-25s = [%.18f, %.18f]%n", "95% confidence interval",
+                        ps.confidenceLo(), ps.confidenceHi());
+        }
 
-    if (trials <= 0) {
-      throw new IllegalArgumentException("Trial number must be more than 0!");
-    }
+        public double mean() {
+                return mean;
+        }
 
-    numOpenSites = new double[trials];
-    this.trials = trials;
+        public double stddev() {
+                return stdDev;
+        }
 
-    for (int i = 0; i < trials; i += 1) {
-      Percolation p = new Percolation(n);
+        public double confidenceLo() {
+                return confidenceLo;
+        }
 
-      while (!p.percolates()) {
-        int row = StdRandom.uniformInt(1, n + 1);
-        int col = StdRandom.uniformInt(1, n + 1);
-        p.open(row, col);
-      }
+        public double confidenceHi() {
+                return confidenceHi;
+        }
 
-      numOpenSites[i] = p.numberOfOpenSites() / (double) (n * n);
-    }
-  }
-
-  // sample mean of percolation threshold
-  public double mean() {
-    return StdStats.mean(numOpenSites);
-  }
-
-  // sample standard deviation of percolation threshold
-  public double stddev() {
-    return StdStats.stddev(numOpenSites);
-  }
-
-  // low endpoint of 95% confidence interval
-  public double confidenceLo() {
-    double mean = this.mean();
-    double standardDeviation = this.stddev();
-
-    return mean - ((CONFIDENCE_95 * standardDeviation) / Math.sqrt(trials));
-  }
-
-  // high endpoint of 95% confidence interval
-  public double confidenceHi() {
-    double mean = this.mean();
-    double standardDeviation = this.stddev();
-
-    return mean + ((CONFIDENCE_95 * standardDeviation) / Math.sqrt(trials));
-  }
-
-  // test client (see below)
-  public static void main(String[] args) {
-    int n = Integer.parseInt(args[1]);
-    int trials = Integer.parseInt(args[2]);
-
-    PercolationStats ps = new PercolationStats(n, trials);
-
-    System.out.printf("%-25s = %.18f%n", "mean", ps.mean());
-    System.out.printf("%-25s = %.18f%n", "stddev", ps.stddev());
-    System.out.printf("%-25s = [%.18f, %.18f]%n", "95% confidence interval",
-      ps.confidenceLo(), ps.confidenceHi());
-  }
+        private int runTrial(int n) {
+                Percolation percolation = new Percolation(n);
+                while (!percolation.percolates()) {
+                        int row = StdRandom.uniformInt(1, n + 1);
+                        int col = StdRandom.uniformInt(1, n + 1);
+                        percolation.open(row, col);
+                }
+                return percolation.numberOfOpenSites();
+        }
 }
